@@ -1,0 +1,23 @@
+[gd_scene load_steps=4 format=3 uid="uid://dq7j15oe8bmdy"]
+
+[ext_resource type="Script" uid="uid://b1do7pyjkfmp3" path="res://health_pack.gd" id="1_bboee"]
+[ext_resource type="Texture2D" uid="uid://b88nvb28nyjxd" path="res://assets/heart.png" id="1_xab54"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_5mrb7"]
+radius = 26.0
+
+[node name="HealthPack" type="Area2D"]
+collision_layer = 2
+script = ExtResource("1_bboee")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(2, 2)
+texture = ExtResource("1_xab54")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -6)
+shape = SubResource("CircleShape2D_5mrb7")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

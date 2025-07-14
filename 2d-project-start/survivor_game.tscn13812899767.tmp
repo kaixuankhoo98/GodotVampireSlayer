@@ -1,0 +1,172 @@
+[gd_scene load_steps=6 format=3 uid="uid://tpjhwebu8x7p"]
+
+[ext_resource type="Script" uid="uid://bwnomx1codmd3" path="res://survivor_game.gd" id="1_5mrb7"]
+[ext_resource type="PackedScene" uid="uid://bp48ik5xi5k8d" path="res://player.tscn" id="1_wkcnj"]
+[ext_resource type="PackedScene" uid="uid://cg8xdrjpb6ppe" path="res://tree.tscn" id="2_8id3q"]
+
+[sub_resource type="Curve2D" id="Curve2D_kbdm8"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, -207, -287, 0, 0, 0, 0, 2228, -290, 0, 0, 0, 0, 2228, 1285, 0, 0, 0, 0, -218, 1287, 0, 0, 0, 0, -220, -277)
+}
+point_count = 5
+
+[sub_resource type="GDScript" id="GDScript_kbdm8"]
+script/source = "extends CanvasLayer
+
+func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action(\"pause\"):
+		get_tree().paused = false
+"
+
+[node name="Game" type="Node2D"]
+process_mode = 3
+y_sort_enabled = true
+script = ExtResource("1_5mrb7")
+
+[node name="Main" type="Node2D" parent="."]
+process_mode = 1
+
+[node name="CanvasLayer" type="CanvasLayer" parent="Main"]
+layer = -1
+
+[node name="ColorRect" type="ColorRect" parent="Main/CanvasLayer"]
+offset_top = 1.0
+offset_right = 1920.0
+offset_bottom = 1080.0
+color = Color(0.375507, 0.307638, 0.184502, 1)
+metadata/_edit_use_anchors_ = true
+
+[node name="Player" parent="Main" instance=ExtResource("1_wkcnj")]
+unique_name_in_owner = true
+position = Vector2(1000, 424)
+
+[node name="Path2D" type="Path2D" parent="Main/Player"]
+position = Vector2(-1000, -424)
+curve = SubResource("Curve2D_kbdm8")
+
+[node name="SpawnPoints" type="PathFollow2D" parent="Main/Player/Path2D"]
+unique_name_in_owner = true
+position = Vector2(-207, -287)
+rotation = -0.00123203
+
+[node name="SpawnTimer" type="Timer" parent="Main/Player/Path2D/SpawnPoints"]
+wait_time = 2.0
+autostart = true
+
+[node name="SpawnTimerReduceTimer" type="Timer" parent="Main/Player/Path2D/SpawnPoints"]
+wait_time = 5.0
+autostart = true
+
+[node name="Tree" parent="Main" instance=ExtResource("2_8id3q")]
+position = Vector2(352, 338)
+
+[node name="Tree2" parent="Main" instance=ExtResource("2_8id3q")]
+position = Vector2(532, 698)
+
+[node name="Tree3" parent="Main" instance=ExtResource("2_8id3q")]
+position = Vector2(1163, 778)
+
+[node name="Tree4" parent="Main" instance=ExtResource("2_8id3q")]
+position = Vector2(1304, 345)
+
+[node name="Tree5" parent="Main" instance=ExtResource("2_8id3q")]
+position = Vector2(1441, 387)
+
+[node name="GameOver" type="CanvasLayer" parent="."]
+unique_name_in_owner = true
+visible = false
+
+[node name="ColorRect" type="ColorRect" parent="GameOver"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.447059)
+
+[node name="Label" type="Label" parent="GameOver/ColorRect"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -11.5
+offset_right = 20.0
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 100
+text = "Game Over"
+
+[node name="Pause" type="CanvasLayer" parent="."]
+unique_name_in_owner = true
+process_mode = 2
+visible = false
+script = SubResource("GDScript_kbdm8")
+
+[node name="PauseMenu" type="Control" parent="Pause"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Pause/PauseMenu"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ResumeButton" type="Button" parent="Pause/PauseMenu/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "Resume"
+
+[node name="RestartButton" type="Button" parent="Pause/PauseMenu/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "Restart"
+
+[node name="ColorRect" type="ColorRect" parent="Pause"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.415686)
+
+[node name="Score" type="CanvasLayer" parent="."]
+
+[node name="ScoreLabel" type="Label" parent="Score"]
+offset_left = 53.0
+offset_top = 23.0
+offset_right = 186.0
+offset_bottom = 92.0
+theme_override_font_sizes/font_size = 50
+text = "Score:"
+
+[node name="ScoreValue" type="Label" parent="Score"]
+unique_name_in_owner = true
+offset_left = 230.0
+offset_top = 23.0
+offset_right = 486.0
+offset_bottom = 92.0
+theme_override_font_sizes/font_size = 50
+text = "0"
+
+[connection signal="health_depleted" from="Main/Player" to="." method="_on_player_health_depleted"]
+[connection signal="timeout" from="Main/Player/Path2D/SpawnPoints/SpawnTimer" to="." method="_on_timer_timeout"]
+[connection signal="timeout" from="Main/Player/Path2D/SpawnPoints/SpawnTimerReduceTimer" to="." method="_on_spawn_timer_reduce_timer_timeout"]
